@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:football_news/widgets/left_drawer.dart';
-import 'package:football_news/widgets/news_card.dart';
-import 'package:football_news/screens/news_form_page.dart';
+import 'package:football_news/widgets/left_drawer.dart'; // Import dari widgets
+import 'package:football_news/widgets/news_card.dart'; // Import ItemCard dan ItemHomepage
+
+// Hapus import newslist_form.dart karena sudah dihandle oleh ItemCard dan berpindah lokasi
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+    MyHomePage({super.key}); //sudah ada pada code sebelumnya
 
-  // Variabel identitas
-  final String nama = "Kalista Wiarta"; // nama
-  final String npm = "2406351491"; // npm
-  final String kelas = "PBP F"; // kelas
+    final String nama = "Kalista Wiarta"; //nama
+    final String npm = "2406351491"; //npm
+    final String kelas = "F"; //kelas
 
-  // List tombol yang akan muncul di halaman utama
-  final List<ItemHomepage> items = [
+    final List<ItemHomepage> items = [
     ItemHomepage("See Football News", Icons.newspaper),
     ItemHomepage("Add News", Icons.add),
     ItemHomepage("Logout", Icons.logout),
-  ];
+    ];
 
-  @override
-  Widget build(BuildContext context) {
+    @override
+    Widget build(BuildContext context) {
     // Scaffold menyediakan struktur dasar halaman dengan AppBar dan body.
     return Scaffold(
       // AppBar adalah bagian atas halaman yang menampilkan judul.
@@ -27,12 +26,15 @@ class MyHomePage extends StatelessWidget {
         // Judul aplikasi "Football News" dengan teks putih dan tebal.
         title: const Text(
           'Football News',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
         backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      drawer: LeftDrawer(),
+      ), 
+      drawer: const LeftDrawer(), // Pastikan LeftDrawer memiliki const
       // Body halaman dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -57,6 +59,7 @@ class MyHomePage extends StatelessWidget {
             Center(
               child: Column(
                 // Menyusun teks dan grid item secara vertikal.
+
                 children: [
                   // Menampilkan teks sambutan dengan gaya tebal dan ukuran 18.
                   const Padding(
@@ -95,23 +98,30 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-// -------------------- InfoCard --------------------
 class InfoCard extends StatelessWidget {
-  final String title; // Judul kartu
-  final String content; // Isi kartu
+  // Kartu informasi yang menampilkan title dan content.
+
+  final String title;  // Judul kartu.
+  final String content;  // Isi kartu.
 
   const InfoCard({super.key, required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.0, // Membuat bayangan di bawah kartu
+      // Membuat kotak kartu dengan bayangan dibawahnya.
+      elevation: 2.0,
       child: Container(
-        width: MediaQuery.of(context).size.width / 4,
+        // Mengatur ukuran dan jarak di dalam kartu.
+        width: MediaQuery.of(context).size.width / 3.5, // menyesuaikan dengan lebar device yang digunakan.
         padding: const EdgeInsets.all(16.0),
+        // Menyusun title dan content secara vertikal.
         child: Column(
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8.0),
             Text(content),
           ],
@@ -119,12 +129,4 @@ class InfoCard extends StatelessWidget {
       ),
     );
   }
-}
-
-// -------------------- ItemHomepage --------------------
-class ItemHomepage {
-  final String name;
-  final IconData icon;
-
-  ItemHomepage(this.name, this.icon);
 }

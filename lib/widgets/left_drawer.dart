@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:football_news/screens/menu.dart';
-import 'package:football_news/widgets/left_drawer.dart';
-import 'package:football_news/screens/news_form_page.dart';
-
+import 'package:football_news/screens/newslist_form.dart';
+import 'package:football_news/screens/news_entry_list.dart'; // ✅ tambah import ini
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -17,7 +16,6 @@ class LeftDrawer extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Football News',
@@ -28,7 +26,7 @@ class LeftDrawer extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 10),
+                Padding(padding: EdgeInsets.all(10)),
                 Text(
                   "Seluruh berita sepak bola terkini di sini!",
                   textAlign: TextAlign.center,
@@ -41,7 +39,7 @@ class LeftDrawer extends StatelessWidget {
               ],
             ),
           ),
-
+          // Home
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Home'),
@@ -52,7 +50,7 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
-
+          // Add News
           ListTile(
             leading: const Icon(Icons.post_add),
             title: const Text('Add News'),
@@ -63,7 +61,19 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
-
+          // ✅ News List (baru ditambahkan)
+          ListTile(
+            leading: const Icon(Icons.list_alt_rounded),
+            title: const Text('News List'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NewsEntryListPage(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

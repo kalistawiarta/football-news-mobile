@@ -1,36 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:football_news/screens/menu.dart';
-import 'package:football_news/screens/news_form_page.dart';
+import 'package:football_news/screens/newslist_form.dart';
+import 'package:football_news/screens/news_entry_list.dart';
+import 'package:football_news/screens/login.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
-// -------------------- ItemCard --------------------
+class ItemHomepage {
+  final String name;
+  final IconData icon;
+
+  ItemHomepage(this.name, this.icon);
+}
+
 class ItemCard extends StatelessWidget {
-  final ItemHomepage item; // Menyimpan data tombol (nama dan ikon)
+  final ItemHomepage item;
 
   const ItemCard(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>(); // ✅ ambil cookie session
     return Material(
-      color: Theme.of(context).colorScheme.secondary, // Warna latar tombol
-      borderRadius: BorderRadius.circular(12), // Sudut melengkung
+      color: Theme.of(context).colorScheme.secondary,
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
-        // Area responsif terhadap sentuhan
-        onTap: () {
-          // Memunculkan SnackBar ketika diklik
+        onTap: () async {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!"),
-              ),
+              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
             );
 
-          // Navigate ke route yang sesuai (tergantung jenis tombol)
-          if (item.name == "Add News" || item.name == "Tambah Berita") {
+          if (item.name == "Add News") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NewsFormPage()),
+              MaterialPageRoute(
+                builder: (context) => const NewsFormPage(),
+              ),
             );
+          } else if (item.name == "See Football News") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NewsEntryListPage(),
+              ),
+            );
+          } 
+          // ✅ Tambahkan Logout di sini
+          else if (item.name == "Logout") {
+            final response = await request.logout(
+              "http://localhost:8000/auth/logout/", // ubah kalau pakai emulator
+            );
+
+            String message = response["message"];
+
+            if (context.mounted) {
+              if (response['status']) {
+                String uname = response["username"];
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("$message See you again, $uname."),
+                  ),
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                  ),
+                );
+              }
+            }
           }
         },
         child: Container(
@@ -39,7 +82,11 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(item.icon, color: Colors.white, size: 30.0),
+                Icon(
+                  item.icon,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
                   item.name,
